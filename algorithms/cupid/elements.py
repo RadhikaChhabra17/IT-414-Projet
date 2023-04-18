@@ -4,7 +4,6 @@ from enum import Enum
 
 class SchemaElement:
     def __init__(self, name):
-        # an element can belong to multiple categories
         self.categories = list()
         self.data_type = None
         self.tokens = list()

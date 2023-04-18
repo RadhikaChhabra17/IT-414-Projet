@@ -98,8 +98,6 @@ def comparison(source_tree, target_tree, categories_source, categories_target, c
 
     return lsim
 
-
-# max = 1
 def name_similarity_tokens(token_set1, token_set2):
     sum1 = get_partial_similarity(token_set1, token_set2)
     sum2 = get_partial_similarity(token_set2, token_set1)
@@ -123,8 +121,6 @@ def get_partial_similarity(token_set1, token_set2, n=2):
 
     return total_sum
 
-
-# the higher, the better
 def compute_similarity_wordnet(word1, word2):
     allsyns1 = set(ss for ss in wn.synsets(word1))
     allsyns2 = set(ss for ss in wn.synsets(word2))
@@ -132,21 +128,18 @@ def compute_similarity_wordnet(word1, word2):
     if len(allsyns1) == 0 or len(allsyns2) == 0:
         return math.nan
 
-    # best = max((wn.wup_similarity(s1, s2) or 0, s1, s2) for s1, s2 in product(allsyns1, allsyns2))
+
     best = max(wn.wup_similarity(s1, s2) or math.nan for s1, s2 in product(allsyns1, allsyns2))
 
     return best
 
 
-# the lower, the better
 def compute_similarity_ngram(word1, word2, n):
     ngram = NGram(n)
     sim = ngram.distance(word1, word2)
-#     print(sim)
     return sim
 
 
-# max is 0.5
 def name_similarity_elements(element1, element2):
     sum1 = 0
     sum2 = 0

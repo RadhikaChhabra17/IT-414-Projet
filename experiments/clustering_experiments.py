@@ -61,27 +61,6 @@ def unix_sort_ranks(corpus):
 
 
 def load_dataset(path: str, threshold1: float, threshold2, quantiles: int, clear_cache: bool = False):
-    """
-    Loads the TPCH dataset to the correlation clustering algorithm mentioned in
-    "Automatic Discovery of Attributes in Relational Databases" [1]
-
-    Parameters
-    ---------
-    path : str
-        The root folder of the TPCH dataset
-    threshold : float
-         The global threshold described in [1]
-    quantiles: int
-        The number of quantiles of the histograms
-    pool: multiprocessing.Pool
-            the process pool that will be used in the pre-processing of the table's columns
-    clear_cache: bool
-            if true it clears the global ranks
-    Returns
-    -------
-    CorrelationClustering
-        the correlation clustering object with the data loaded
-    """
     if clear_cache:
         generate_global_ranks(path)
 
@@ -102,27 +81,7 @@ def create_cache_dirs():
 
 
 def get_results(path: str, threshold1: float, threshold2: float, quantiles: int, clear_cache: bool = True):
-    """
-    Runs the Schema Matching pipeline described in
-    "Automatic Discovery of Attributes in Relational Databases" [1]
-
-    Parameters
-    ---------
-    path : str
-        The root folder of the TPCH dataset
-    threshold1 : float
-         The global threshold described in [1]
-    threshold2 : float
-         The global threshold described in [1]
-    quantiles: int
-        The number of quantiles that the histograms are split on
-    # process_pool: multiprocessing.Pool
-    #         the process pool that will be used in the pre-processing of the table's columns
-    # chunk_size: int, optional
-    #         the number of chunks of each job process (default let the framework decide)
-    clear_cache: bool, optional
-            clear the previous global ranks
-    """
+    
     create_cache_dirs()
 
     correlation_clustering = load_dataset(path, threshold1, threshold2, quantiles, clear_cache=clear_cache)
@@ -132,14 +91,5 @@ def get_results(path: str, threshold1: float, threshold2: float, quantiles: int,
 
 
 if __name__ == "__main__":
-    """
-    argv[1] -> the dataset root path
-    argv[2] -> the global threshold
-    argv[4] -> the number of quantiles 
-    argv[5] -> clear cache or not
 
-    e.g. python3 run_tpch_benchmark.py ../data/clustering/ 0.1 0.1 50 True
-    """
-    # get_results(sys.argv[1], threshold1=float(sys.argv[2]), threshold2=float(sys.argv[2]),
-    #             quantiles=int(sys.argv[3]), clear_cache=bool(sys.argv[4]))
     get_results("./data/clustering/paper/", threshold1=0.1, threshold2=0.1, quantiles=50, clear_cache=True)

@@ -12,8 +12,8 @@ from os.path import isfile, join
 from cupid.tree_match import tree_match, recompute_wsim, mapping_generation_leaves, mapping_generation_non_leaves
 
 CURRENT_DIR = os.path.dirname(__file__)
-RDB_SCHEMA = '/home/radhika/reproducing-schema-matching/data/cupid/paper/rdb_schema.csv'
-STAR_SCHEMA = '/home/radhika/reproducing-schema-matching/data/cupid/paper/star_schema.csv'
+RDB_SCHEMA = '/path-to-your-repositary/data/cupid/paper/rdb_schema.csv'
+STAR_SCHEMA = '/path-to-your-repositary/data/cupid/paper/star_schema.csv'
 
 
 def write_mappings(mappings, filename):
@@ -35,14 +35,11 @@ def run_experiments(source_tree, target_tree, cupid_model, out_dir, leaf_range, 
             sims = tree_match(source_tree, target_tree, cupid_model.get_categories(), th_accept=i, th_low=i - factor,
                               th_high=i + factor,
                               leaf_w_struct=j, w_struct=j + 0.1, th_ns=0.45)
-            # new_sims = recompute_wsim(source_tree, target_tree, sims, th_accept=i)
+            
             map1 = mapping_generation_leaves(source_tree, target_tree, sims, th_accept=i)
-            # map2 = mapping_generation_non_leaves(source_tree, target_tree, new_sims, th_accept=i)
             print("Leaf matchings:\n {}".format(map1))
-            # print("Non-leaf matchings:\n {}".format(map2))
 
             write_mappings(map1, '{}/test_{}.txt'.format(dirname, i))
-    # write_mappings(map2, 'cupid-output/non-leaf_{}.txt'.format(i))
 
 
 def read_tuple_file(filepath):
@@ -120,7 +117,6 @@ def make_plot(x, precision_list, recall_list, f1_list, name):
     plt.xlabel('th_accept threshold')
     plt.ylabel('Value')
     plt.title('Precision/Recall/F1-score for w_struct_leaf = {}'.format(name))
-    # plt.show()
     plt.savefig('cupid_{}.pdf'.format(name), dpi=300)
 
 
@@ -130,10 +126,8 @@ def closer_to(interval, pos):
     diff_max = abs(interval[pos] - interval[pos + 1])
 
     if diff_min < diff_max:
-        # the point is lower than the maximum f1-score
         return -1
     else:
-        # the point is higher than the maximum f1-score
         return 1
 
 

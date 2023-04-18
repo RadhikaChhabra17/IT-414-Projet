@@ -6,7 +6,6 @@ from cupid.linguistic_matching import normalization
 from cupid.tree_match import tree_match, recompute_wsim, mapping_generation_leaves, mapping_generation_non_leaves
 
 
-# TODO: make the code compatible for multiple categories
 def create_cupid_element(data_type, element_name, source_name, category):
     element = normalization(element_name)
     element.data_type = data_type
@@ -109,4 +108,3 @@ def example():
     new_sims = recompute_wsim(source_tree, target_tree, sims)
 
     print("Leaf matchings:\n {}".format(mapping_generation_leaves(source_tree, target_tree, sims)))
-    # print("Non-leaf matchings:\n {}".format(mapping_generation_non_leaves(source_tree, target_tree, new_sims)))
