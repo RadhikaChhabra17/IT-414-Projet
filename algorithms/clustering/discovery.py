@@ -16,15 +16,15 @@ def compute_distribution_clusters(columns: list, threshold: float, quantiles: in
     A: dict = transform_dict(dict(tqdm([process_emd(i) for i in combinations], total=total)))
     print(A)
 
-    edges_per_column = list([parallel_cutoff_threshold(j) for j in list(cuttoff_column_generator(A, columns, threshold))])
-    graph = create_graph(columns, edges_per_column)
+    epc = list([parallel_cutoff_threshold(j) for j in list(cuttoff_column_generator(A, columns, threshold))])
+    graph = create_graph(columns, epc)
 
     nx.draw(graph)
     # plt.show()
 
-    connected_components = list(nx.connected_components(graph))
+    cc = list(nx.connected_components(graph))
 
-    return connected_components
+    return cc
 
 
 def compute_attributes(DC: list, threshold: float, quantiles: int = 256):
@@ -70,12 +70,6 @@ def correlation_clustering_pulp(vertexes, edges):
 
     x_vars = {(i, j): plp.LpVariable(cat=plp.LpInteger, lowBound=0, upBound=1, name="{0}--{1}".format(i, j))
               for i in set_u for j in set_v}
-
-    # constraints = {(i, j, k): plp.LpConstraint(e=x_vars[i, k],
-    #                                            sense=plp.LpConstraintLE,
-    #                                            rhs=x_vars[i, j] + x_vars[j, k],
-    #                                            name="constraint_{0}_{1}_{2}".format(i, j, k))
-    #                for i in set_u for j in set_v for k in set_w}
 
     sum1 = plp.lpSum(x_vars[i, j] for i in set_u for j in set_v if edges[i][j] == 1)
     sum2 = plp.lpSum(1 - x_vars[i, j] for i in set_u for j in set_v if edges[i][j] == -1)
